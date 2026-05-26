@@ -15,30 +15,20 @@ export function ProductInteractiveDemo() {
   const [balance, setBalance] = useState(124500);
 
   useEffect(() => {
-    let isMounted = true;
     let timer: any;
     // Ciclo de animação automática
     const sequence = async () => {
       // Step 0: Idle / Start
-      if (!isMounted) return;
       setStep(1); // Detect Debt
       await wait(2000);
-      if (!isMounted) return;
       setStep(2); // AI Analysis
       await wait(2000);
-      if (!isMounted) return;
       setStep(3); // Communication
       await wait(3000);
-      if (!isMounted) return;
       setStep(4); // Payment
       await wait(1000);
-      if (!isMounted) return;
       // Increment Balance animation
       const interval = setInterval(() => {
-        if (!isMounted) {
-            clearInterval(interval);
-            return;
-        }
         setBalance(prev => {
             const next = prev + 150;
             if (next >= 125250) {
@@ -50,23 +40,14 @@ export function ProductInteractiveDemo() {
       }, 50);
       
       await wait(2000);
-      if (!isMounted) return;
       setStep(5); // Success State
       await wait(3000);
-      if (!isMounted) return;
       setStep(0); // Reset
       setBalance(124500);
-      
-      if (isMounted) {
-        timer = setTimeout(sequence, 1000);
-      }
     };
 
     timer = setTimeout(sequence, 1000);
-    return () => {
-      isMounted = false;
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -99,7 +80,7 @@ export function ProductInteractiveDemo() {
 
             {/* Main Stage */}
             <div className="flex-1 relative p-6 flex flex-col items-center justify-center">
-                <AnimatePresence>
+                <AnimatePresence mode="wait">
                     
                     {/* STEP 1: DEBT DETECTED */}
                     {step === 1 && (

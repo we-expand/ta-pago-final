@@ -7,8 +7,8 @@ import InteractiveButton from './ui/InteractiveButton';
 import QRCode from 'react-qr-code';
 
 // Import logos locais
-import cegidPrimaveraLogo from "../../assets/c4db6abc77177a382ea613c910af85468e7de259.png";
-import moloniLogo from "../../assets/4f43a629e6a891c24e414e82c80daec1e276c956.png";
+import cegidPrimaveraLogo from "figma:asset/c4db6abc77177a382ea613c910af85468e7de259.png";
+import moloniLogo from "figma:asset/4f43a629e6a891c24e414e82c80daec1e276c956.png";
 
 type IntegrationCategory = 'Financeiro' | 'CRM' | 'Pagamentos' | 'Comunicação' | 'ERP' | 'Outros';
 

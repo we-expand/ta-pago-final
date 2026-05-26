@@ -12,28 +12,20 @@ export function BiometricScanScreen({ isOpen, onComplete, status }: BiometricSca
   const [pulseIntensity, setPulseIntensity] = useState(0);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    
     if (status === 'scanning') {
-      interval = setInterval(() => {
+      const interval = setInterval(() => {
         setPulseIntensity(prev => (prev + 1) % 3);
       }, 800);
+      return () => clearInterval(interval);
     }
-    
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
   }, [status]);
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {isOpen && (
         <>
           {/* Backdrop */}
           <motion.div
-            key="backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -48,7 +40,6 @@ export function BiometricScanScreen({ isOpen, onComplete, status }: BiometricSca
           {/* Modal Centralizado */}
           <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4">
             <motion.div
-              key="modal"
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}

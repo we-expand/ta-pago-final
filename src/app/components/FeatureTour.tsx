@@ -55,10 +55,9 @@ export default function FeatureTour() {
 
   useEffect(() => {
     const completed = localStorage.getItem('tapago_tour_completed');
-    // TEMPORARIAMENTE DESABILITADO - Investigando erro removeChild
-    if (false && !completed) { // Adicionado 'false &&' para desabilitar
-      // Aumentar delay para evitar conflito com modal biométrico (que aparece em 2s)
-      const timer = setTimeout(() => setIsVisible(true), 4000);
+    if (!completed) {
+      // Pequeno delay para não assustar o usuário logo que carrega
+      const timer = setTimeout(() => setIsVisible(true), 1500);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -81,12 +80,11 @@ export default function FeatureTour() {
   const currentStep = STEPS[currentStepIndex];
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {isVisible && (
         <div className="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center">
           {/* Backdrop Dimmed */}
           <motion.div
-            key="tour-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -96,7 +94,7 @@ export default function FeatureTour() {
 
           {/* Tour Card */}
           <motion.div
-            key={`tour-step-${currentStep.id}`}
+            key={currentStep.id}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}

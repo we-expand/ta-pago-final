@@ -2,8 +2,7 @@
 export async function authenticateUser(accessToken: string): Promise<{ user: any; error: any }> {
   try {
     console.log('[SIMPLE_AUTH] Starting authentication...');
-    console.log('[SIMPLE_AUTH] Token received (first 100 chars):', accessToken ? `${accessToken.substring(0, 100)}...` : 'NONE');
-    console.log('[SIMPLE_AUTH] Full Token received:', accessToken);
+    console.log('[SIMPLE_AUTH] Token received:', accessToken ? `${accessToken.substring(0, 30)}...` : 'NONE');
     
     if (!accessToken) {
       console.log('[SIMPLE_AUTH] ❌ No token provided');
@@ -26,10 +25,7 @@ export async function authenticateUser(accessToken: string): Promise<{ user: any
     }
     
     console.log('[SIMPLE_AUTH] Decoding payload...');
-    const binString = atob(base64);
-    const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0)!);
-    const payloadStr = new TextDecoder().decode(bytes);
-    const payload = JSON.parse(payloadStr);
+    const payload = JSON.parse(atob(base64));
     console.log('[SIMPLE_AUTH] Payload decoded:', {
       sub: payload.sub,
       email: payload.email,
@@ -39,7 +35,6 @@ export async function authenticateUser(accessToken: string): Promise<{ user: any
     
     // Check expiration
     const now = Math.floor(Date.now() / 1000);
-    console.log('[SIMPLE_AUTH] Current time (now):', now, 'Payload exp:', payload.exp);
     console.log('[SIMPLE_AUTH] Token expiration check:', { now, exp: payload.exp, expired: payload.exp < now });
     
     if (payload.exp < now) {
@@ -62,6 +57,6 @@ export async function authenticateUser(accessToken: string): Promise<{ user: any
     };
   } catch (err) {
     console.error('[SIMPLE_AUTH] ❌ Exception:', err);
-    return { user: null, error: { message: (err as any).message } };
+    return { user: null, error: { message: err.message } };
   }
 }

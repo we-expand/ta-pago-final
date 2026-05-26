@@ -41,7 +41,7 @@ export async function generateRegistrationOptions(userId: string, userName: stri
   });
 
   return {
-    challenge: base64urlEncode(new TextEncoder().encode(challenge).buffer),
+    challenge,
     rp: {
       name: "Tá Pago.pt",
       id: rpID
@@ -77,14 +77,13 @@ export async function verifyRegistration(userId: string, response: any, rpID: st
   if (response.response.clientDataJSON) {
     // Salvar credencial
     const credential: Credential = {
-      id: base64urlEncode(response.rawId),
-      publicKey: base64urlEncode(response.response.attestationObject),
+      id: response.id,
+      publicKey: response.response.attestationObject,
       counter: 0,
       transports: response.response.transports
     };
 
     await kv.set(`webauthn_credential_${userId}`, credential);
-    await kv.set(`webauthn_credential_id_to_user_${credential.id}`, userId); // Store mapping
     await kv.del(`webauthn_challenge_${userId}`);
 
     return { verified: true };
@@ -184,31 +183,47 @@ export async function verifyLogin(response: any, rpID: string, origin: string) {
     throw new Error('Challenge not found or expired');
   }
 
-  // Buscar userId a partir do credential.id
-  const userId = await kv.get(`webauthn_credential_id_to_user_${response.id}`);
-  if (!userId) {
-    console.error("[WEBAUTHN SERVICE] User ID not found for credential ID:", response.id);
-    return { verified: false, userId: null };
+  // Buscar todas as credenciais e encontrar a que corresponde
+  const allKeys = await kv.getByPrefix('webauthn_credential_');
+  console.log('[WEBAUTHN SERVICE] Searching through', allKeys.length, 'credentials');
+  
+  for (const credentialData of allKeys) {
+    if (credentialData.id === response.id) {
+      // Encontrou! Extrair userId da chave
+      // Formato: webauthn_credential_${userId}
+      const keys = await kv.getByPrefix('webauthn_credential_');
+      for (const item of keys) {
+        if (item.id === response.id) {
+          // Buscar a chave original para extrair o userId
+          const allEntries = await kv.getByPrefix('webauthn_credential_');
+          // A chave está no formato webauthn_credential_${userId}
+          // Mas o KV só retorna valores, precisamos iterar diferente
+          
+          // HACK: Vamos iterar por todos os possíveis userIds
+          // Isso não é ideal mas funciona para MVP
+          const possibleUserIds = await kv.getByPrefix('user_');
+          for (const userData of possibleUserIds) {
+            const testUserId = userData.id || userData.userId;
+            if (!testUserId) continue;
+            
+            const testCredential = await kv.get(`webauthn_credential_${testUserId}`);
+            if (testCredential && testCredential.id === response.id) {
+              console.log('[WEBAUTHN SERVICE] ✅ Found matching credential for user:', testUserId);
+              await kv.del(`webauthn_login_challenge_${challenge}`);
+              return { verified: true, userId: testUserId };
+            }
+          }
+        }
+      }
+    }
   }
 
-  // Buscar a credencial específica do usuário
-  const credential = await kv.get(`webauthn_credential_${userId}`);
-  if (!credential || credential.id !== response.id) {
-    console.error("[WEBAUTHN SERVICE] No matching credential found for user", userId, "with ID", response.id);
-    return { verified: false, userId: null };
-  }
-
-  console.log("[WEBAUTHN SERVICE] ✅ Found matching credential for user:", userId);
-  await kv.del(`webauthn_login_challenge_${challenge}`);
-  return { verified: true, userId: userId };
+  console.error('[WEBAUTHN SERVICE] ❌ No matching credential found');
+  return { verified: false, userId: null };
 }
 
 // Reset de credenciais
 export async function resetUserCredentials(userId: string) {
-  const credential = await kv.get(`webauthn_credential_${userId}`);
-  if (credential && credential.id) {
-    await kv.del(`webauthn_credential_id_to_user_${credential.id}`);
-  }
   await kv.del(`webauthn_credential_${userId}`);
   await kv.del(`webauthn_challenge_${userId}`);
   await kv.del(`webauthn_auth_challenge_${userId}`);

@@ -22,39 +22,29 @@ export function ProductInteractiveDemoLarge() {
 
   // Simulation Cycle
   useEffect(() => {
-    let isMounted = true;
     const cycle = async () => {
       // 1. Highlight a new case (Ricardo)
       await wait(1000);
-      if (!isMounted) return;
       setActiveChat(1); // Open Chat visualization
       
       // 2. Simulate User Typing
       await wait(2000);
-      if (!isMounted) return;
       // Update activity status
       setActivities(prev => prev.map(a => a.id === 1 ? { ...a, status: 'typing' } : a));
 
       // 3. User Replies
       await wait(1500);
-      if (!isMounted) return;
       setActivities(prev => prev.map(a => a.id === 1 ? { ...a, status: 'replied' } : a));
 
       // 4. AI Analysis & Response (Payment Link)
       await wait(1000);
-      if (!isMounted) return;
       
       // 5. Success
       await wait(2500);
-      if (!isMounted) return;
       setActivities(prev => prev.map(a => a.id === 1 ? { ...a, status: 'paid' } : a));
       
       // Animate Balance
       const interval = setInterval(() => {
-        if (!isMounted) {
-            clearInterval(interval);
-            return;
-        }
         setBalance(prev => {
             const next = prev + 150;
             if (next >= 124950) {
@@ -67,10 +57,8 @@ export function ProductInteractiveDemoLarge() {
 
       // 6. Reset / Switch to next
       await wait(4000);
-      if (!isMounted) return;
       setActiveChat(null);
       await wait(1000);
-      if (!isMounted) return;
       
       // Reset Balance for loop
       setBalance(124500); 
@@ -83,13 +71,13 @@ export function ProductInteractiveDemoLarge() {
 
     // Run the cycle in a loop
     const runLoop = async () => {
-        while(isMounted) {
+        while(true) {
             await cycle();
         }
     }
     runLoop();
 
-    return () => { isMounted = false; }; 
+    return () => {}; 
   }, []);
 
   const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -160,7 +148,7 @@ export function ProductInteractiveDemoLarge() {
 
             {/* RIGHT SIDE - Active Context / Chat */}
             <div className="flex-1 relative bg-slate-50/30 p-8 flex flex-col">
-                <AnimatePresence>
+                <AnimatePresence mode="wait">
                     {activeChat ? (
                         <motion.div 
                             key="chat-view"
