@@ -265,7 +265,7 @@ export default function IntegrationHub({ session }: { session: any }) {
     <motion.div 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-[1600px] mx-auto space-y-8 pb-12"
+      className="w-full space-y-8 pb-12"
     >
       {/* Header Responsivo */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -356,7 +356,6 @@ export default function IntegrationHub({ session }: { session: any }) {
                   </span>
                 </div>
 
-                {/* Grid Responsivo Ampliado para suportar a nova largura */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                   {categoryIntegrations.map((integration) => {
                     const isConnected = connected.includes(integration.id);
