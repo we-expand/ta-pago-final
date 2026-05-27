@@ -16,7 +16,7 @@ interface Integration {
   id: string;
   name: string;
   description: string;
-  logo: string; // URL
+  logo: string;
   status: string;
   category: IntegrationCategory;
   bgColor: string;
@@ -37,7 +37,6 @@ export default function IntegrationHub({ session }: { session: any }) {
   const [apiKey, setApiKey] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
 
-  // Buscar integrações conectadas ao carregar
   useEffect(() => {
     fetchConnectedIntegrations();
   }, []);
@@ -49,7 +48,6 @@ export default function IntegrationHub({ session }: { session: any }) {
       });
       if (response.ok) {
         const data = await response.json();
-        // data.integrations é array de objetos { key, value: { id, ... } }
         const connectedIds = data.integrations.map((i: any) => i.value.id);
         setConnected(connectedIds);
       }
@@ -71,247 +69,110 @@ export default function IntegrationHub({ session }: { session: any }) {
   ];
 
   const integrations: Integration[] = [
-    // === FINANCEIRO ===
     { 
-      id: 'primavera',
-      name: 'Cegid Primavera', 
-      description: 'ERP líder em Portugal para gestão empresarial completa',
-      logo: cegidPrimaveraLogo, 
-      status: 'Disponível', 
-      category: 'Financeiro',
-      bgColor: 'from-blue-500 to-blue-600',
-      features: ['Faturação', 'Contabilidade', 'Gestão de Stock'],
-      website: 'https://www.cegid.com/pt/primavera/'
+      id: 'primavera', name: 'Cegid Primavera', description: 'ERP líder em Portugal para gestão empresarial completa',
+      logo: cegidPrimaveraLogo, status: 'Disponível', category: 'Financeiro', bgColor: 'from-blue-500 to-blue-600',
+      features: ['Faturação', 'Contabilidade', 'Gestão de Stock'], website: 'https://www.cegid.com/pt/primavera/'
     },
     { 
-      id: 'sage',
-      name: 'Sage', 
-      description: 'Software de contabilidade e gestão para PMEs',
-      logo: 'https://cdn.worldvectorlogo.com/logos/sage-2.svg', 
-      status: 'Disponível', 
-      category: 'Financeiro',
-      bgColor: 'from-green-500 to-green-600',
-      features: ['Contabilidade', 'Folha de Pagamento', 'Relatórios'],
-      website: 'https://www.sage.com/pt-pt/'
+      id: 'sage', name: 'Sage', description: 'Software de contabilidade e gestão para PMEs',
+      logo: 'https://cdn.worldvectorlogo.com/logos/sage-2.svg', status: 'Disponível', category: 'Financeiro',
+      bgColor: 'from-green-500 to-green-600', features: ['Contabilidade', 'Folha de Pagamento', 'Relatórios'], website: 'https://www.sage.com/pt-pt/'
     },
     { 
-      id: 'moloni',
-      name: 'Moloni', 
-      description: 'Faturação online certificada pela AT',
-      logo: moloniLogo, 
-      status: 'Disponível', 
-      category: 'Financeiro',
-      bgColor: 'from-purple-500 to-purple-600',
-      features: ['Faturação', 'Certificação AT', 'API REST'],
-      website: 'https://www.moloni.pt/'
+      id: 'moloni', name: 'Moloni', description: 'Faturação online certificada pela AT',
+      logo: moloniLogo, status: 'Disponível', category: 'Financeiro', bgColor: 'from-purple-500 to-purple-600',
+      features: ['Faturação', 'Certificação AT', 'API REST'], website: 'https://www.moloni.pt/'
     },
     { 
-      id: 'xero',
-      name: 'Xero', 
-      description: 'Contabilidade online para pequenas empresas',
-      logo: 'https://cdn.worldvectorlogo.com/logos/xero.svg', 
-      status: 'Disponível', 
-      category: 'Financeiro',
-      bgColor: 'from-teal-500 to-cyan-600',
-      features: ['Contabilidade', 'Reconciliação', 'Relatórios'],
-      website: 'https://www.xero.com/'
-    },
-
-    // === CRM ===
-    { 
-      id: 'linkedin',
-      name: 'LinkedIn', 
-      description: 'Sincronização de contatos e enriquecimento de perfil',
-      logo: 'https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg', 
-      status: 'Disponível', 
-      category: 'CRM',
-      bgColor: 'from-blue-600 to-blue-700',
-      features: ['Contatos', 'Enriquecimento', 'Social'],
-      website: 'https://www.linkedin.com/'
+      id: 'xero', name: 'Xero', description: 'Contabilidade online para pequenas empresas',
+      logo: 'https://cdn.worldvectorlogo.com/logos/xero.svg', status: 'Disponível', category: 'Financeiro',
+      bgColor: 'from-teal-500 to-cyan-600', features: ['Contabilidade', 'Reconciliação', 'Relatórios'], website: 'https://www.xero.com/'
     },
     { 
-      id: 'salesforce',
-      name: 'Salesforce', 
-      description: 'CRM líder mundial para gestão de clientes',
-      logo: 'https://cdn.worldvectorlogo.com/logos/salesforce-2.svg', 
-      status: 'Disponível', 
-      category: 'CRM',
-      bgColor: 'from-blue-400 to-cyan-500',
-      features: ['Gestão de Leads', 'Pipeline', 'Analytics'],
-      website: 'https://www.salesforce.com/'
+      id: 'linkedin', name: 'LinkedIn', description: 'Sincronização de contatos e enriquecimento de perfil',
+      logo: 'https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg', status: 'Disponível', category: 'CRM',
+      bgColor: 'from-blue-600 to-blue-700', features: ['Contatos', 'Enriquecimento', 'Social'], website: 'https://www.linkedin.com/'
     },
     { 
-      id: 'hubspot',
-      name: 'HubSpot', 
-      description: 'Plataforma completa de marketing e vendas',
-      logo: 'https://cdn.worldvectorlogo.com/logos/hubspot.svg', 
-      status: 'Disponível', 
-      category: 'CRM',
-      bgColor: 'from-orange-400 to-red-500',
-      features: ['CRM', 'Marketing', 'Automação'],
-      website: 'https://www.hubspot.com/'
+      id: 'salesforce', name: 'Salesforce', description: 'CRM líder mundial para gestão de clientes',
+      logo: 'https://cdn.worldvectorlogo.com/logos/salesforce-2.svg', status: 'Disponível', category: 'CRM',
+      bgColor: 'from-blue-400 to-cyan-500', features: ['Gestão de Leads', 'Pipeline', 'Analytics'], website: 'https://www.salesforce.com/'
     },
     { 
-      id: 'pipedrive',
-      name: 'Pipedrive', 
-      description: 'CRM focado em pipeline de vendas',
-      logo: 'https://cdn.worldvectorlogo.com/logos/pipedrive.svg', 
-      status: 'Disponível', 
-      category: 'CRM',
-      bgColor: 'from-pink-400 to-pink-600',
-      features: ['Pipeline', 'Vendas', 'Relatórios'],
-      website: 'https://www.pipedrive.com/'
+      id: 'hubspot', name: 'HubSpot', description: 'Plataforma completa de marketing e vendas',
+      logo: 'https://cdn.worldvectorlogo.com/logos/hubspot.svg', status: 'Disponível', category: 'CRM',
+      bgColor: 'from-orange-400 to-red-500', features: ['CRM', 'Marketing', 'Automação'], website: 'https://www.hubspot.com/'
     },
     { 
-      id: 'zoho',
-      name: 'Zoho CRM', 
-      description: 'CRM completo e acessível',
-      logo: 'https://cdn.worldvectorlogo.com/logos/zoho-1.svg', 
-      status: 'Disponível', 
-      category: 'CRM',
-      bgColor: 'from-red-400 to-orange-500',
-      features: ['Gestão de Clientes', 'Automação', 'IA'],
-      website: 'https://www.zoho.com/crm/'
-    },
-
-    // === PAGAMENTOS ===
-    { 
-      id: 'stripe',
-      name: 'Stripe', 
-      description: 'Processamento de pagamentos online',
-      logo: 'https://cdn.worldvectorlogo.com/logos/stripe-4.svg', 
-      status: 'Disponível', 
-      category: 'Pagamentos',
-      bgColor: 'from-violet-500 to-purple-600',
-      features: ['Pagamentos Online', 'Subscriptions', 'API'],
-      website: 'https://stripe.com/'
+      id: 'pipedrive', name: 'Pipedrive', description: 'CRM focado em pipeline de vendas',
+      logo: 'https://cdn.worldvectorlogo.com/logos/pipedrive.svg', status: 'Disponível', category: 'CRM',
+      bgColor: 'from-pink-400 to-pink-600', features: ['Pipeline', 'Vendas', 'Relatórios'], website: 'https://www.pipedrive.com/'
     },
     { 
-      id: 'paypal',
-      name: 'PayPal', 
-      description: 'Gateway de pagamento global',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg', 
-      status: 'Disponível', 
-      category: 'Pagamentos',
-      bgColor: 'from-blue-500 to-indigo-600',
-      features: ['Pagamentos', 'Global', 'Seguro'],
-      website: 'https://www.paypal.com/'
+      id: 'zoho', name: 'Zoho CRM', description: 'CRM completo e acessível',
+      logo: 'https://cdn.worldvectorlogo.com/logos/zoho-1.svg', status: 'Disponível', category: 'CRM',
+      bgColor: 'from-red-400 to-orange-500', features: ['Gestão de Clientes', 'Automação', 'IA'], website: 'https://www.zoho.com/crm/'
     },
     { 
-      id: 'easypay',
-      name: 'Easypay', 
-      description: 'Solução portuguesa de pagamentos',
-      logo: 'https://asset.brandfetch.io/idf-7v-zAR/idrXo6q_7E.svg', 
-      status: 'Disponível', 
-      category: 'Pagamentos',
-      bgColor: 'from-cyan-400 to-blue-500',
-      features: ['MB WAY', 'Multibanco', 'Cartões'],
-      website: 'https://www.easypay.pt/'
-    },
-
-    // === COMUNICAÇÃO ===
-    { 
-      id: 'twilio',
-      name: 'Twilio', 
-      description: 'SMS, WhatsApp e comunicação programável',
-      logo: 'https://cdn.worldvectorlogo.com/logos/twilio.svg', 
-      status: 'Disponível', 
-      category: 'Comunicação',
-      bgColor: 'from-red-500 to-pink-600',
-      features: ['SMS', 'WhatsApp', 'Voice'],
-      website: 'https://www.twilio.com/'
+      id: 'stripe', name: 'Stripe', description: 'Processamento de pagamentos online',
+      logo: 'https://cdn.worldvectorlogo.com/logos/stripe-4.svg', status: 'Disponível', category: 'Pagamentos',
+      bgColor: 'from-violet-500 to-purple-600', features: ['Pagamentos Online', 'Subscriptions', 'API'], website: 'https://stripe.com/'
     },
     { 
-      id: 'sendgrid',
-      name: 'SendGrid', 
-      description: 'Envio de emails transacionais em massa',
-      logo: 'https://cdn.worldvectorlogo.com/logos/sendgrid-1.svg', 
-      status: 'Disponível', 
-      category: 'Comunicação',
-      bgColor: 'from-blue-600 to-cyan-600',
-      features: ['Email', 'Templates', 'Analytics'],
-      website: 'https://sendgrid.com/'
+      id: 'paypal', name: 'PayPal', description: 'Gateway de pagamento global',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg', status: 'Disponível', category: 'Pagamentos',
+      bgColor: 'from-blue-500 to-indigo-600', features: ['Pagamentos', 'Global', 'Seguro'], website: 'https://www.paypal.com/'
     },
     { 
-      id: 'mailchimp',
-      name: 'Mailchimp', 
-      description: 'Marketing automation e email marketing',
-      logo: 'https://cdn.worldvectorlogo.com/logos/mailchimp-freddie-icon.svg', 
-      status: 'Disponível', 
-      category: 'Comunicação',
-      bgColor: 'from-yellow-400 to-yellow-600',
-      features: ['Email Marketing', 'Automação', 'Campanhas'],
-      website: 'https://mailchimp.com/'
+      id: 'easypay', name: 'Easypay', description: 'Solução portuguesa de pagamentos',
+      logo: 'https://asset.brandfetch.io/idf-7v-zAR/idrXo6q_7E.svg', status: 'Disponível', category: 'Pagamentos',
+      bgColor: 'from-cyan-400 to-blue-500', features: ['MB WAY', 'Multibanco', 'Cartões'], website: 'https://www.easypay.pt/'
     },
     { 
-      id: 'whatsapp-business',
-      name: 'WhatsApp', 
-      description: 'API oficial do WhatsApp para empresas',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg', 
-      status: 'Disponível', 
-      category: 'Comunicação',
-      bgColor: 'from-green-500 to-emerald-600',
-      features: ['WhatsApp', 'Oficial', 'Business'],
-      website: 'https://business.whatsapp.com/'
-    },
-
-    // === ERP ===
-    { 
-      id: 'sap',
-      name: 'SAP', 
-      description: 'ERP para pequenas e médias empresas',
-      logo: 'https://cdn.worldvectorlogo.com/logos/sap-1.svg', 
-      status: 'Disponível', 
-      category: 'ERP',
-      bgColor: 'from-blue-700 to-indigo-800',
-      features: ['ERP Completo', 'Internacional', 'Escalável'],
-      website: 'https://www.sap.com/'
+      id: 'twilio', name: 'Twilio', description: 'SMS, WhatsApp e comunicação programável',
+      logo: 'https://cdn.worldvectorlogo.com/logos/twilio.svg', status: 'Disponível', category: 'Comunicação',
+      bgColor: 'from-red-500 to-pink-600', features: ['SMS', 'WhatsApp', 'Voice'], website: 'https://www.twilio.com/'
     },
     { 
-      id: 'odoo',
-      name: 'Odoo', 
-      description: 'Suite de aplicações empresariais open-source',
-      logo: 'https://cdn.worldvectorlogo.com/logos/odoo.svg', 
-      status: 'Disponível', 
-      category: 'ERP',
-      bgColor: 'from-purple-600 to-pink-600',
-      features: ['Open Source', 'Modular', 'Completo'],
-      website: 'https://www.odoo.com/'
-    },
-
-    // === OUTROS ===
-    { 
-      id: 'zapier',
-      name: 'Zapier', 
-      description: 'Automação entre milhares de apps',
-      logo: 'https://cdn.worldvectorlogo.com/logos/zapier-1.svg', 
-      status: 'Disponível', 
-      category: 'Outros',
-      bgColor: 'from-orange-500 to-red-600',
-      features: ['Automação', 'Integrações', 'No-code'],
-      website: 'https://zapier.com/'
+      id: 'sendgrid', name: 'SendGrid', description: 'Envio de emails transacionais em massa',
+      logo: 'https://cdn.worldvectorlogo.com/logos/sendgrid-1.svg', status: 'Disponível', category: 'Comunicação',
+      bgColor: 'from-blue-600 to-cyan-600', features: ['Email', 'Templates', 'Analytics'], website: 'https://sendgrid.com/'
     },
     { 
-      id: 'make',
-      name: 'Make', 
-      description: 'Automação visual de workflows',
-      logo: 'https://asset.brandfetch.io/idIcon/id20mQyv5L.svg', 
-      status: 'Disponível', 
-      category: 'Outros',
-      bgColor: 'from-purple-500 to-indigo-600',
-      features: ['Automação Visual', 'Workflows', 'Integração'],
-      website: 'https://www.make.com/'
+      id: 'mailchimp', name: 'Mailchimp', description: 'Marketing automation e email marketing',
+      logo: 'https://cdn.worldvectorlogo.com/logos/mailchimp-freddie-icon.svg', status: 'Disponível', category: 'Comunicação',
+      bgColor: 'from-yellow-400 to-yellow-600', features: ['Email Marketing', 'Automação', 'Campanhas'], website: 'https://mailchimp.com/'
     },
     { 
-      id: 'google-sheets',
-      name: 'Google Sheets', 
-      description: 'Sincronização com planilhas Google',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Google_Sheets_logo_%282014-2020%29.svg', 
-      status: 'Disponível', 
-      category: 'Outros',
-      bgColor: 'from-green-500 to-green-600',
-      features: ['Planilhas', 'Cloud', 'Colaborativo'],
-      website: 'https://www.google.com/sheets/about/'
+      id: 'whatsapp-business', name: 'WhatsApp', description: 'API oficial do WhatsApp para empresas',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg', status: 'Disponível', category: 'Comunicação',
+      bgColor: 'from-green-500 to-emerald-600', features: ['WhatsApp', 'Oficial', 'Business'], website: 'https://business.whatsapp.com/'
+    },
+    { 
+      id: 'sap', name: 'SAP', description: 'ERP para pequenas e médias empresas',
+      logo: 'https://cdn.worldvectorlogo.com/logos/sap-1.svg', status: 'Disponível', category: 'ERP',
+      bgColor: 'from-blue-700 to-indigo-800', features: ['ERP Completo', 'Internacional', 'Escalável'], website: 'https://www.sap.com/'
+    },
+    { 
+      id: 'odoo', name: 'Odoo', description: 'Suite de aplicações empresariais open-source',
+      logo: 'https://cdn.worldvectorlogo.com/logos/odoo.svg', status: 'Disponível', category: 'ERP',
+      bgColor: 'from-purple-600 to-pink-600', features: ['Open Source', 'Modular', 'Completo'], website: 'https://www.odoo.com/'
+    },
+    { 
+      id: 'zapier', name: 'Zapier', description: 'Automação entre milhares de apps',
+      logo: 'https://cdn.worldvectorlogo.com/logos/zapier-1.svg', status: 'Disponível', category: 'Outros',
+      bgColor: 'from-orange-500 to-red-600', features: ['Automação', 'Integrações', 'No-code'], website: 'https://zapier.com/'
+    },
+    { 
+      id: 'make', name: 'Make', description: 'Automação visual de workflows',
+      logo: 'https://asset.brandfetch.io/idIcon/id20mQyv5L.svg', status: 'Disponível', category: 'Outros',
+      bgColor: 'from-purple-500 to-indigo-600', features: ['Automação Visual', 'Workflows', 'Integração'], website: 'https://www.make.com/'
+    },
+    { 
+      id: 'google-sheets', name: 'Google Sheets', description: 'Sincronização com planilhas Google',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Google_Sheets_logo_%282014-2020%29.svg', status: 'Disponível', category: 'Outros',
+      bgColor: 'from-green-500 to-green-600', features: ['Planilhas', 'Cloud', 'Colaborativo'], website: 'https://www.google.com/sheets/about/'
     }
   ];
 
@@ -321,10 +182,8 @@ export default function IntegrationHub({ session }: { session: any }) {
          toast.info("Painel de Administração do LinkedIn será aberto em breve.");
          return;
       }
-      // Desconectar imediatamente
       toggleConnection(integration.id, integration.name, 'disconnect');
     } else {
-      // Abrir modal para conectar
       setConnectingInt(integration);
       setApiKey('');
     }
@@ -365,7 +224,6 @@ export default function IntegrationHub({ session }: { session: any }) {
   const handleConfirmConnect = () => {
     if (!connectingInt) return;
     if (connectingInt.id === 'linkedin') {
-       // Direct connect for OAuth simulation
        toggleConnection(connectingInt.id, connectingInt.name, 'connect');
        return;
     }
@@ -379,22 +237,15 @@ export default function IntegrationHub({ session }: { session: any }) {
   const simulateOAuth = () => {
      if (!connectingInt) return;
      setIsConnecting(true);
-     
-     // Simulation only - in prod would be real OAuth URL
-     // Removed window.open to improve mobile compatibility and avoid popup blockers
      toast.loading("Conectando à página do LinkedIn: Tá Pago...", { duration: 2000 });
-     
      setTimeout(() => {
         toggleConnection(connectingInt.id, "LinkedIn (Tá Pago)", 'connect');
      }, 2000);
   };
 
   const filteredIntegrations = integrations.filter(integration => {
-    // Filtro de busca
-    const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         integration.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchesSearch;
+    return integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           integration.description.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   const getIntegrationsByCategory = (categoryId: string) => {
@@ -411,22 +262,26 @@ export default function IntegrationHub({ session }: { session: any }) {
   };
 
   return (
-    <div className="p-8 space-y-8 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex items-start justify-between">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="w-full max-w-[1600px] mx-auto space-y-8 pb-12"
+    >
+      {/* Header Responsivo */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3 tracking-tight">
             <Zap className="size-8 text-indigo-600" />
             Central de Integrações
           </h1>
-          <p className="text-slate-600 mt-2 text-lg">
+          <p className="text-slate-600 mt-2 text-lg font-light">
             Conecte sua plataforma com as ferramentas que você já usa.
           </p>
         </div>
         
-        {/* Quick Stats */}
-        <div className="flex gap-4">
-          <div className="bg-white px-6 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+        {/* Quick Stats Responsivo */}
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
             <div className="size-10 rounded-full bg-green-100 flex items-center justify-center">
               <CheckCircle2 className="size-5 text-green-600" />
             </div>
@@ -435,7 +290,7 @@ export default function IntegrationHub({ session }: { session: any }) {
               <div className="text-xs text-slate-500 font-medium mt-1">Conectadas</div>
             </div>
           </div>
-          <div className="bg-white px-6 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div className="bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
             <div className="size-10 rounded-full bg-indigo-100 flex items-center justify-center">
               <Globe className="size-5 text-indigo-600" />
             </div>
@@ -449,7 +304,6 @@ export default function IntegrationHub({ session }: { session: any }) {
 
       {/* Controls */}
       <div className="flex flex-col gap-6">
-        {/* Search */}
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-slate-400" />
           <input
@@ -461,13 +315,12 @@ export default function IntegrationHub({ session }: { session: any }) {
           />
         </div>
 
-        {/* Categories Tabs */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {categories.map(category => (
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id as any)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold whitespace-nowrap transition-all border ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold whitespace-nowrap transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
                 selectedCategory === category.id
                   ? 'bg-indigo-600 text-white border-indigo-600 shadow-md transform scale-105'
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
@@ -503,7 +356,8 @@ export default function IntegrationHub({ session }: { session: any }) {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {/* Grid Responsivo Ampliado para suportar a nova largura */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                   {categoryIntegrations.map((integration) => {
                     const isConnected = connected.includes(integration.id);
                     
@@ -513,13 +367,12 @@ export default function IntegrationHub({ session }: { session: any }) {
                         layout
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`group relative bg-white rounded-2xl border-2 transition-all duration-300 flex flex-col items-center text-center overflow-hidden ${
+                        className={`group relative bg-white rounded-3xl border-2 transition-all duration-300 flex flex-col items-center text-center overflow-hidden ${
                           isConnected 
                             ? 'border-green-500 shadow-green-100 shadow-lg' 
                             : 'border-slate-100 hover:border-indigo-200 hover:shadow-xl'
                         }`}
                       >
-                        {/* Status Badge */}
                         <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 transition-colors ${
                           isConnected ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
                         }`}>
@@ -527,9 +380,7 @@ export default function IntegrationHub({ session }: { session: any }) {
                           {isConnected ? 'Ativo' : 'Inativo'}
                         </div>
 
-                        {/* Card Content */}
                         <div className="p-6 flex flex-col items-center flex-1 w-full">
-                          {/* Logo Area */}
                           <div className="mb-5 relative">
                             <div className="size-20 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center p-3 group-hover:scale-110 transition-transform duration-300 overflow-hidden">
                               <img 
@@ -547,7 +398,7 @@ export default function IntegrationHub({ session }: { session: any }) {
 
                           <h3 className="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
                             {integration.name}
-                            <a href={integration.website} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-indigo-600 transition-colors" title="Visitar site">
+                            <a href={integration.website} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-indigo-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded" title="Visitar site">
                               <ExternalLink className="size-4" />
                             </a>
                           </h3>
@@ -555,7 +406,6 @@ export default function IntegrationHub({ session }: { session: any }) {
                             {integration.description}
                           </p>
 
-                          {/* Features Tags */}
                           <div className="flex flex-wrap justify-center gap-1.5 mb-6">
                             {integration.features.slice(0, 3).map(feature => (
                               <span 
@@ -567,11 +417,10 @@ export default function IntegrationHub({ session }: { session: any }) {
                             ))}
                           </div>
 
-                          {/* Action Button - Always at bottom */}
                           <div className="mt-auto w-full pt-4 border-t border-slate-50">
                             <InteractiveButton
                               variant={isConnected ? 'ghost' : 'primary'}
-                              className={`w-full justify-center ${
+                              className={`w-full justify-center rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 ${
                                 isConnected 
                                   ? 'bg-green-50 text-green-700 hover:bg-green-100 hover:text-green-800 border border-green-200' 
                                   : ''
@@ -626,7 +475,7 @@ export default function IntegrationHub({ session }: { session: any }) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+              className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
@@ -634,25 +483,24 @@ export default function IntegrationHub({ session }: { session: any }) {
                     <img 
                       src={connectingInt.logo} 
                       alt="Logo" 
-                      className="size-10 object-contain rounded-lg border border-slate-100"
+                      className="size-10 object-contain rounded-lg border border-slate-100 bg-white"
                     />
                     <div>
                       <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                         Conectar {connectingInt.name}
-                        <a href={connectingInt.website} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-indigo-600">
+                        <a href={connectingInt.website} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-indigo-600 focus-visible:ring-2 rounded focus-visible:outline-none focus-visible:ring-indigo-500">
                           <ExternalLink className="size-4" />
                         </a>
                       </h3>
                       <p className="text-sm text-slate-500">Configuração de Integração</p>
                     </div>
                   </div>
-                  <button onClick={() => setConnectingInt(null)} className="text-slate-400 hover:text-slate-600">
+                  <button onClick={() => setConnectingInt(null)} className="text-slate-400 hover:text-slate-600 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-indigo-500 rounded-md p-1">
                     <X className="size-6" />
                   </button>
                 </div>
 
                 {connectingInt.id === 'linkedin' ? (
-                  // LinkedIn Special Flow
                   <div className="flex flex-col items-center justify-center py-8 space-y-6">
                     <div className="p-4 bg-blue-50 rounded-full animate-pulse">
                       <img src={connectingInt.logo} className="size-16" alt="LinkedIn" />
@@ -669,7 +517,7 @@ export default function IntegrationHub({ session }: { session: any }) {
                        <InteractiveButton
                          onClick={simulateOAuth}
                          loading={isConnecting}
-                         className="w-full bg-[#0077B5] hover:bg-[#006396] text-white border-none h-14 text-lg font-bold shadow-lg shadow-blue-900/20 rounded-xl justify-center"
+                         className="w-full bg-[#0077B5] hover:bg-[#006396] text-white border-none h-14 text-lg font-bold shadow-lg shadow-blue-900/20 rounded-xl justify-center focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0077B5]"
                        >
                           {!isConnecting && (
                             <img 
@@ -688,10 +536,9 @@ export default function IntegrationHub({ session }: { session: any }) {
                     </div>
                   </div>
                 ) : (
-                  // Standard Flow
                   <div className="space-y-6">
-                    <div className="flex gap-2 p-1 bg-slate-100 rounded-lg">
-                      <button className="flex-1 py-2 px-3 text-sm font-medium bg-white text-slate-900 rounded-md shadow-sm flex items-center justify-center gap-2">
+                    <div className="flex gap-2 p-1 bg-slate-100 rounded-xl">
+                      <button className="flex-1 py-2 px-3 text-sm font-medium bg-white text-slate-900 rounded-lg shadow-sm flex items-center justify-center gap-2">
                         <QrCode className="size-4" />
                         Scan QR Code
                       </button>
@@ -710,8 +557,7 @@ export default function IntegrationHub({ session }: { session: any }) {
                           viewBox={`0 0 256 256`}
                         />
                         
-                        {/* Overlay para simulação rápida */}
-                        <div className="absolute inset-0 bg-white/90 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="absolute inset-0 bg-white/90 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
                           <button 
                             onClick={() => toggleConnection(connectingInt.id, connectingInt.name, 'connect')}
                             className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-lg hover:bg-indigo-700 transition-transform hover:scale-105"
@@ -736,7 +582,7 @@ export default function IntegrationHub({ session }: { session: any }) {
                         <span className="w-full border-t border-slate-200" />
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white px-2 text-slate-500">Ou use a Chave de API</span>
+                        <span className="bg-white px-2 text-slate-500 font-medium">Ou use a Chave de API</span>
                       </div>
                     </div>
 
@@ -760,7 +606,7 @@ export default function IntegrationHub({ session }: { session: any }) {
                     <InteractiveButton
                       variant="ghost"
                       onClick={() => setConnectingInt(null)}
-                      className="flex-1 justify-center"
+                      className="flex-1 justify-center rounded-xl"
                     >
                       Cancelar
                     </InteractiveButton>
@@ -768,7 +614,7 @@ export default function IntegrationHub({ session }: { session: any }) {
                       variant="primary"
                       onClick={handleConfirmConnect}
                       loading={isConnecting}
-                      className="flex-1 justify-center"
+                      className="flex-1 justify-center rounded-xl shadow-lg"
                     >
                       Conectar Integração
                     </InteractiveButton>
@@ -779,6 +625,6 @@ export default function IntegrationHub({ session }: { session: any }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
